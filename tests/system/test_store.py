@@ -73,7 +73,7 @@ class StoreTest(BaseTest):
                 self.assertEqual(resp.status_code, 200)
                 #  self.assertDictEqual({'items': [{'name': 'test', 'price': 19.99}],
                 #  'name': 'test'}, json.loads(resp.data))
-                self.assertDictEqual({'name': 'test', 'items': []},
+                self.assertDictEqual({'id': 1, 'name': 'test', 'items': []},
                                      json.loads(resp.data))
 
     def test_store_list(self):
