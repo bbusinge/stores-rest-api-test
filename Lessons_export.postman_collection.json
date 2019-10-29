@@ -1,0 +1,643 @@
+{
+	"info": {
+		"_postman_id": "a1a8a2a8-2712-432a-88b6-3b987ea53b49",
+		"name": "Lessons_export",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user create store and item Copy",
+			"item": [
+				{
+					"name": "/register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "26e202bd-961d-4e31-83c7-a26c21fcc4b9",
+								"exec": [
+									"",
+									"// we use javascript in writing tests in postman",
+									"",
+									"postman.clearEnvironmentVariable(\"access_token\")  // clears the old token when a new user is registering",
+									"",
+									"tests[\"Response time is less than 200ms\"] = responseTime < 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"User created successfully\"] = jsonData.message === \"User created successfully\";",
+									"",
+									"tests[\"Content-Type is present in response\"] = postman.getResponseHeader('Content-Type');",
+									"tests[\"Content-Type has a value of 'application/json\"] = postman.getResponseHeader('Content-Type') === 'application/json'"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "08914ec7-d579-471c-a92a-2183862d5bc6",
+								"exec": [
+									" "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\n\t\"username\": \"donk1731\",\n\t\"password\": \"ateenyi b\"\n\t\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"register"
+							]
+						},
+						"description": "testing endpoint"
+					},
+					"response": []
+				},
+				{
+					"name": "/auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "031b5c0b-cc29-41a7-a3c0-49fb73347c2e",
+								"exec": [
+									" var jsonData = JSON.parse(responseBody);",
+									" ",
+									" postman.setEnvironmentVariable(\"access_token\", jsonData.access_token);",
+									" ",
+									" tests[\"Ststus code is 200\"] = responseCode.code === 200;",
+									" tests[\"Body contains Access_token\"]= responseBody.has(\"access_token\");",
+									" ",
+									" tests[\"Response time is less than 200ms\"] = responseTime < 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"donk1731\",\n\t\"password\": \"ateenyi b\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth"
+							]
+						},
+						"description": "testing the author endpoint"
+					},
+					"response": []
+				},
+				{
+					"name": "/store/<name>",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1360a64c-8306-4f2a-99e3-08f1b441411d",
+								"exec": [
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Response time is less than 200ms\"] = responseTime < 200;",
+									"tests[\"Store name is returned\"] = jsonData.name = 'trust51';",
+									"//tests[\"Store items are an empty list\"] = jsonData.items.length === 0;",
+									"",
+									"tests[\"Successful post request\"] = responseCode.code === 201;",
+									"tests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");",
+									"tests[\"Content-Type is application/json\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json';",
+									"",
+									"postman.setEnvironmentVariable(\"store_id\", jsonData.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/store/kasese",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"store",
+								"kasese"
+							]
+						},
+						"description": "creating store"
+					},
+					"response": []
+				},
+				{
+					"name": "/item/<name>",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c6580540-8cfe-42d5-b0f8-ad02ebfec86e",
+								"exec": [
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Item name is returned\"] = jsonData.name === 'blazers22';",
+									"tests[\"Item price is returned\"] = jsonData.price === 100.0;",
+									"tests[\"successful POST Request\"] = responseCode.code === 201;",
+									"tests[\"Response time is less than 200ms\"] = responseTime < 200;",
+									"tests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");",
+									"tests[\"Content-Type is application/json\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json'; "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"price\": 100.0, \n\t\"store_id\": {{store_id}}\n\t\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/item/blazers22",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"item",
+								"blazers22"
+							]
+						},
+						"description": "Posts item into store"
+					},
+					"response": []
+				},
+				{
+					"name": "/stores",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ffdb5bdb-27f2-45c3-aef0-36aac81db758",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									" ",
+									" // postman.setEnvironmentVariable(\"access_token\", jsonData.access_token);",
+									" ",
+									" tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"// tests[\"Body contains Access_token\"]= responseBody.has(\"access_token\");",
+									" ",
+									" tests[\"Response time is less than 200ms\"] = responseTime < 200;",
+									" tests[\"Store 'trust4' is returned \"] = jsonData.stores[0].name === 'trust4';",
+									" tests[\"Item 'blazers1' is returned inside 'trust4' \"] = jsonData.stores[0].items[0].name === 'blazers1';",
+									" tests[\"Item 'blazers1' price is returned inside 'trust4' \"] = jsonData.stores[0].items[0].price === 100.0;",
+									" tests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");",
+									"tests[\"Content-Type is application/json\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json'"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/stores",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stores"
+							]
+						},
+						"description": "details of the store"
+					},
+					"response": []
+				},
+				{
+					"name": "/item/<name>",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "dd74cd69-972b-492a-b4f0-26474c7b407e",
+								"exec": [
+									"tests[\"Response time is less than 100ms\"] = responseTime < 100;",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{access_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT{{url}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/item/blazers1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"item",
+								"blazers1"
+							]
+						},
+						"description": "get Item from store"
+					},
+					"response": []
+				},
+				{
+					"name": "/item/my_item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c675454d-b1ec-405d-a54a-8e1d441eee62",
+								"exec": [
+									" var jsonData = JSON.parse(responseBody);",
+									" tests[\"Response time is less than 200ms\"] = responseTime < 200;",
+									" tests[\"No Item found, Status code is 404\"] = responseCode.code === 404;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/item/blazers12",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"item",
+								"blazers12"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "list of items"
+					},
+					"response": []
+				},
+				{
+					"name": "/store/<name>",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fba2e1f4-551c-4590-9e1c-5b25bf489bc9",
+								"exec": [
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Store name is returned\"] = jsonData.name === 'trust4';",
+									"//tests[\"Store id is returned\"] = jsonData.id === 1;",
+									"tests[\"Store items are an empty list\"] = jsonData.items.length > 0;",
+									"tests[\"Response time is less than 200ms\"] = responseTime < 200;",
+									"// tests[\"Successful POST Request\"] = responseCode.code === 201;",
+									"tests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");",
+									"tests[\"Content-Type is application/json\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json';",
+									"postman.setEnvironmentVariable(\"store_id\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/store/trust4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"store",
+								"trust4"
+							]
+						},
+						"description": "retrieving data from store kampala"
+					},
+					"response": []
+				},
+				{
+					"name": "/items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cd72ed94-4366-4fcd-a514-5d62a689841d",
+								"exec": [
+									"tests[\"Response time is less than 100ms\"] = responseTime < 100;",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/items",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"items"
+							]
+						},
+						"description": "list of Items"
+					},
+					"response": []
+				},
+				{
+					"name": "/item/my_item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3b33225e-476f-4c25-bbff-cccf92db9fa6",
+								"exec": [
+									"tests[\"Response time is less than 100ms\"] = responseTime < 100;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/item/TL5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"item",
+								"TL5"
+							]
+						},
+						"description": "Deleting item from store"
+					},
+					"response": []
+				},
+				{
+					"name": "{{url}}/store/masindi",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "069b8f26-7d53-4a5b-a997-57216abc08f4",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Store name is returned\"] = jsonData.message === 'Store deleted';",
+									"tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"tests[\"Response time is less than 200ms\"] = responseTime < 200;",
+									"tests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");",
+									"tests[\"Content-Type is 'application/json\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json';"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT{{access_token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/store/masindi",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"store",
+								"masindi"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
